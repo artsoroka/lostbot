@@ -1,36 +1,20 @@
-var Promise = require('bluebird'); 
-var WebTorrent = require('./webtorrent'); 
-var fs = require('fs'); 
-var parser = require('parse-torrent'); 
+var express    = require('express'); 
+var app        = express(); 
+var bodyParser = require('body-parser'); 
+var config     = require('./config'); 
 
-module.exports = function(config){
-  return new Promise(function(resolve, reject){
-    var file   = parser(fs.readFileSync(config.file));  
-    var magnet = parser.toMagnetURI({
-        infoHash: file.infoHash
-    });
-    var client = new WebTorrent()
+app.use(bodyParser.json()); 
 
-    client.download(file, function (torrent) {
-      console.log('Torrent info hash:', torrent.infoHash)
+app.get('/', function(req,res){
+    res.send('welcome to lostbot');  
+}); 
+ 
+app.post(config.telegram.webhookUrl, function(req,res){
+    console.log('got request'); 
+    console.dir(req.body);
+    res.status(200).send('OK'); 
+}); 
 
-      torrent.on('done', function(){
-        console.log('download is complete'); 
-        resolve({
-          file: config.outputFile, 
-          size: fs.statSync(config.outputFile) 
-        }); 
-      }); 
-
-      torrent.files.forEach(function (file) {
-        // Stream each file to the disk
-        var source = file.createReadStream()
-        var destination = fs.createWriteStream(config.outputFile); 
-        source.pipe(destination)
-      })
-
-    })
-
-  })
-
-}
+var listener = app.listen(config.App.port, function(){
+  console.log('App started on port', listener.address().port); 
+}); 
