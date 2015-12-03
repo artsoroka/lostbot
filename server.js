@@ -1,20 +1,18 @@
-var express    = require('express'); 
-var app        = express(); 
-var bodyParser = require('body-parser'); 
-var config     = require('./config'); 
+var http    = require('http'); 
+var teleBot = require('./lib/telegramBot'); 
+var bot     = teleBot.bot; 
 
-app.use(bodyParser.json()); 
+var server = http.createServer(teleBot.server);  
 
-app.get('/', function(req,res){
-    res.send('welcome to lostbot');  
-}); 
- 
-app.post(config.telegram.webhookUrl, function(req,res){
-    console.log('got request'); 
-    console.dir(req.body);
-    res.status(200).send('OK'); 
+bot.on('message', function(req){
+    console.log('new message', req); 
 }); 
 
-var listener = app.listen(config.App.port, function(){
+bot.on('photo', function(req){
+    console.log('new image'); 
+    console.dir(req); 
+});
+
+var listener = server.listen(8080, function(){
   console.log('App started on port', listener.address().port); 
 }); 
