@@ -3,6 +3,20 @@ module.exports = {
         port: process.env.LB_PORT || 8080, 
         host: process.env.LB_HOST || 'localhost'
     }, 
+    db: {
+	    user     : process.env.LB_DB_USER || 'dbadmin', 
+	    password : process.env.LB_DB_PSWD, 
+	    database : process.env.LB_DB_NAME || 'lostbot', 
+	    port     : process.env.LB_DB_PORT || 3306
+	}, 
+    log: {
+        papertrail: {
+            host: process.env.PAPERTRAIL_HOST, 
+            port: process.env.PAPERTRAIL_PORT,  
+            program: 'lostbot', 
+            colorize: true
+        }
+    }, 
     telegram: {
         token: process.env.LB_TELEGRAM_TOKEN,
         webhookUrl: process.env.LB_TELEGRAM_WEBHOOK || '/telegram_webhook'
