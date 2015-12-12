@@ -1,7 +1,10 @@
 module.exports = {
     App: {
         port: process.env.LB_PORT || 8080, 
-        host: process.env.LB_HOST || 'localhost'
+        host: process.env.LB_HOST || 'localhost',
+        files: {
+            torrent_files_dir: __dirname + '/torrent_files'
+        }
     }, 
     db: {
 	    user     : process.env.LB_DB_USER || 'dbadmin', 
@@ -16,6 +19,17 @@ module.exports = {
             program: 'lostbot', 
             colorize: true
         }
+    }, 
+    webdriver: { 
+        desiredCapabilities: { 
+            browserName: 'chrome' 
+        }, 
+        host: process.env.WEBDRIVER_HOST, 
+        port: process.env.WEBDRIVER_PORT
+    }, 
+    lostfilm: {
+        username: process.env.LOSTFILM_USER, 
+        password: process.env.LOSTFILM_PSWD 
     }, 
     telegram: {
         token: process.env.LB_TELEGRAM_TOKEN,
